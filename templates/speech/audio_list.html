@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Your Uploaded Audio Files</h2>
+    <ul class="list-group mt-4">
+        {% for audio in audio_records %}
+            <li class="list-group-item">
+                <a href="{{ audio.file.url }}" target="_blank">{{ audio.file.name }}</a>
+                <span class="text-muted float-end">{{ audio.uploaded_at }}</span>
+                <form method="post" action="{% url 'delete_audio' audio.pk %}" style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger btn-sm">Delete</button>
+                </form>
+            </li>
+        {% empty %}
+            <li class="list-group-item">No audio files uploaded yet.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

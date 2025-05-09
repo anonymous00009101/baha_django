@@ -19,3 +19,17 @@ class AudioRecord(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.file.name}"
+
+class SpeechReport(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    audio_file = models.FileField(upload_to='analyzed_audio/')
+    recognized_text = models.TextField()
+    analysis = models.TextField()
+    wpm = models.FloatField()  # Words per minute
+    pause_count = models.IntegerField()
+    total_pause_duration = models.FloatField()
+    clarity = models.FloatField()
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Speech Report ({self.created_at}) - {self.user.username}"

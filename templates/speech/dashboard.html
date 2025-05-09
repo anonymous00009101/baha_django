@@ -1,0 +1,113 @@
+<!-- filepath: c:\Users\PC\Desktop\Баха\diction_ai\templates\speech\dashboard.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Diction AI Dashboard</h2>
+    <ul class="nav nav-tabs" id="myTab" role="tablist">
+        <li class="nav-item" role="presentation">
+            <button class="nav-link active" id="analyze-tab" data-bs-toggle="tab" data-bs-target="#analyze" type="button" role="tab" aria-controls="analyze" aria-selected="true">Analyze Audio</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="audio-list-tab" data-bs-toggle="tab" data-bs-target="#audio-list" type="button" role="tab" aria-controls="audio-list" aria-selected="false">My Audio</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="record-tab" data-bs-toggle="tab" data-bs-target="#record" type="button" role="tab" aria-controls="record" aria-selected="false">Record Audio</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="send-audio-tab" data-bs-toggle="tab" data-bs-target="#send-audio" type="button" role="tab" aria-controls="send-audio" aria-selected="false">Send Audio to Bot</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="send-message-tab" data-bs-toggle="tab" data-bs-target="#send-message" type="button" role="tab" aria-controls="send-message" aria-selected="false">Send Message</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="telegram-tab" data-bs-toggle="tab" data-bs-target="#telegram" type="button" role="tab" aria-controls="telegram" aria-selected="false">Telegram Bot</button>
+        </li>
+        <li class="nav-item" role="presentation">
+            <button class="nav-link" id="upload-tab" data-bs-toggle="tab" data-bs-target="#upload" type="button" role="tab" aria-controls="upload" aria-selected="false">Upload Audio</button>
+        </li>
+    </ul>
+    <div class="tab-content" id="myTabContent">
+        <!-- Analyze Audio -->
+        <div class="tab-pane fade show active" id="analyze" role="tabpanel" aria-labelledby="analyze-tab">
+            <h3>Analyze Audio</h3>
+            <form method="post" enctype="multipart/form-data" action="{% url 'analyze_audio' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="audio">Upload Audio:</label>
+                    <input type="file" id="audio" name="audio" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Analyze</button>
+            </form>
+        </div>
+
+        <!-- My Audio -->
+        <div class="tab-pane fade" id="audio-list" role="tabpanel" aria-labelledby="audio-list-tab">
+            <h3>My Audio</h3>
+            <ul class="list-group mt-4">
+                {% for audio in audio_records %}
+                    <li class="list-group-item">
+                        <a href="{{ audio.file.url }}" target="_blank">{{ audio.file.name }}</a>
+                        <span class="text-muted float-end">{{ audio.uploaded_at }}</span>
+                    </li>
+                {% empty %}
+                    <li class="list-group-item">No audio files uploaded yet.</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- Record Audio -->
+        <div class="tab-pane fade" id="record" role="tabpanel" aria-labelledby="record-tab">
+            <h3>Record Audio</h3>
+            <button id="start" class="btn btn-success">Start Recording</button>
+            <button id="stop" class="btn btn-danger" disabled>Stop Recording</button>
+            <audio id="audioPlayback" controls class="mt-4" style="display: none;"></audio>
+        </div>
+
+        <!-- Send Audio to Bot -->
+        <div class="tab-pane fade" id="send-audio" role="tabpanel" aria-labelledby="send-audio-tab">
+            <h3>Send Audio to Telegram Bot</h3>
+            <form method="post" enctype="multipart/form-data" action="{% url 'send_audio_to_bot' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="audio">Upload Audio:</label>
+                    <input type="file" id="audio" name="audio" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Send</button>
+            </form>
+        </div>
+
+        <!-- Send Message -->
+        <div class="tab-pane fade" id="send-message" role="tabpanel" aria-labelledby="send-message-tab">
+            <h3>Send Message to Telegram Bot</h3>
+            <form method="post" action="{% url 'send_message_to_bot' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="message">Message:</label>
+                    <textarea id="message" name="message" class="form-control" rows="3"></textarea>
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Send</button>
+            </form>
+        </div>
+
+        <!-- Telegram Bot -->
+        <div class="tab-pane fade" id="telegram" role="tabpanel" aria-labelledby="telegram-tab">
+            <h3>Telegram Bot</h3>
+            <iframe src="https://t.me/itdiction_bot" width="100%" height="600" style="border:none;"></iframe>
+        </div>
+
+        <!-- Upload Audio -->
+        <div class="tab-pane fade" id="upload" role="tabpanel" aria-labelledby="upload-tab">
+            <h3>Upload Audio</h3>
+            <form method="post" enctype="multipart/form-data" action="{% url 'upload_audio' %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="file">Upload Audio:</label>
+                    <input type="file" id="file" name="file" class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary mt-3">Upload</button>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Send Audio to Telegram Bot</h2>
+    {% if success %}
+        <div class="alert alert-success">Audio sent successfully!</div>
+    {% elif error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="audio">Upload Audio:</label>
+            <input type="file" id="audio" name="audio" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Send</button>
+    </form>
+</div>
+{% endblock %}

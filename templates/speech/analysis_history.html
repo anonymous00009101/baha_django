@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Analysis History</h2>
+    <ul class="list-group">
+        {% for report in reports %}
+            <li class="list-group-item">
+                <strong>Date:</strong> {{ report.created_at }}<br>
+                <strong>Recognized Text:</strong> {{ report.recognized_text }}<br>
+                <strong>WPM:</strong> {{ report.wpm }}<br>
+                <strong>Pause Count:</strong> {{ report.pause_count }}<br>
+                <strong>Total Pause Duration:</strong> {{ report.total_pause_duration }} seconds<br>
+                <strong>Clarity:</strong> {{ report.clarity }}%<br>
+                <strong>Analysis:</strong> {{ report.analysis }}
+            </li>
+        {% empty %}
+            <li class="list-group-item">No analysis history available.</li>
+        {% endfor %}
+    </ul>
+</div>
+{% endblock %}

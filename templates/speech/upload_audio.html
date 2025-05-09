@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Upload Audio</h2>
+    <form method="post" enctype="multipart/form-data" action="{% url 'upload_audio' %}">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="file">Upload Audio:</label>
+            <input type="file" id="file" name="file" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Upload</button>
+    </form>
+</div>
+{% endblock %}

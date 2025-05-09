@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Send Message to Telegram Bot</h2>
+    {% if success %}
+        <div class="alert alert-success">Message sent successfully!</div>
+    {% elif error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+    <form method="post">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" class="form-control" rows="3"></textarea>
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Send</button>
+    </form>
+</div>
+{% endblock %}

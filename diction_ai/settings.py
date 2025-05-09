@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 
 from pathlib import Path
 import os
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -134,3 +135,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 LOGIN_URL = '/accounts/login/'  # URL страницы входа
 LOGIN_REDIRECT_URL = '/profile/'  # Перенаправление после входа
 LOGOUT_REDIRECT_URL = '/accounts/login/'  # Перенаправление после выхода
+
+TELEGRAM_BOT_TOKEN = config('TELEGRAM_BOT_TOKEN')
+OPENROUTER_API_KEY = config('OPENROUTER_API_KEY')
+SITE_URL = config('SITE_URL')
+SITE_NAME = config('SITE_NAME')
+CHAT_ID = config('CHAT_ID')

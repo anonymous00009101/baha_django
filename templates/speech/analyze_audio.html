@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h2>Analyze Audio</h2>
+    {% if error %}
+        <div class="alert alert-danger">{{ error }}</div>
+    {% elif text and analysis and metrics %}
+        <div class="alert alert-success">
+            <h4>Results:</h4>
+            <p><strong>Recognized Text:</strong> {{ text }}</p>
+            <p><strong>Analysis:</strong> {{ analysis }}</p>
+            <p><strong>Metrics:</strong></p>
+            <ul>
+                <li>Words per Minute (WPM): {{ metrics.wpm }}</li>
+                <li>Pause Count: {{ metrics.pause_count }}</li>
+                <li>Total Pause Duration: {{ metrics.total_pause_duration }} seconds</li>
+                <li>Clarity: {{ metrics.clarity }}%</li>
+            </ul>
+        </div>
+    {% endif %}
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="audio">Upload Audio:</label>
+            <input type="file" id="audio" name="audio" class="form-control">
+        </div>
+        <button type="submit" class="btn btn-primary mt-3">Analyze</button>
+    </form>
+</div>
+{% endblock %}
