@@ -1,0 +1,57 @@
+<!-- filepath: templates/speech/profile.html -->
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <div class="card shadow-lg" style="max-width: 700px; margin: 0 auto; border-radius: 15px;">
+        <div class="card-body">
+            <!-- Аватар и основная информация -->
+            <div class="text-center">
+                {% if user.userprofile %}
+                    {% if user.userprofile.avatar %}
+                        <img src="{{ user.userprofile.avatar.url }}" alt="Avatar">
+                    {% else %}
+                        <div class="rounded-circle bg-secondary text-white d-flex align-items-center justify-content-center mb-3" style="width: 150px; height: 150px; font-size: 2rem;">
+                            {{ user.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+                {% endif %}
+                <h2 class="card-title">{{ user.username }}</h2>
+                <p class="text-muted">{{ user.email }}</p>
+            </div>
+
+            <!-- О пользователе -->
+            {% if user.userprofile.bio %}
+                <div class="mt-4">
+                    <h5 class="text-primary">About Me</h5>
+                    <p>{{ user.userprofile.bio }}</p>
+                </div>
+            {% endif %}
+
+            <!-- Дополнительная информация -->
+            <div class="mt-4">
+                <h5 class="text-primary">Additional Information</h5>
+                <ul class="list-group">
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><strong>Date Joined:</strong></span>
+                        <span>{{ user.date_joined|date:"F j, Y" }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><strong>Last Login:</strong></span>
+                        <span>{{ user.last_login|date:"F j, Y, g:i a" }}</span>
+                    </li>
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span><strong>Full Name:</strong></span>
+                        <span>{{ user.first_name }} {{ user.last_name }}</span>
+                    </li>
+                </ul>
+            </div>
+
+            <!-- Кнопка редактирования профиля -->
+            <div class="mt-4 text-center">
+                <a href="#" class="btn btn-primary">Edit Profile</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
