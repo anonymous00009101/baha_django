@@ -15,4 +15,5 @@ urlpatterns = [
     path('analyze_audio/', views.analyze_audio, name='analyze_audio'),
     path('dashboard/', views.dashboard, name='dashboard'),
     path('analysis_history/', views.analysis_history, name='analysis_history'),
+    path('upgrade_subscription/', views.upgrade_subscription, name='upgrade_subscription'),
 ]

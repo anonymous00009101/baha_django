@@ -1,5 +1,5 @@
 # filepath: speech/views.py
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
 from .forms import UserProfileForm
@@ -16,7 +16,8 @@ import os
 import uuid
 from pydub import AudioSegment
 from .diction_bot import transcribe_with_whisper_local, client
-from .models import SpeechReport
+from .models import SpeechReport, UserProfile
+from django.core.serializers.json import DjangoJSONEncoder
 
 @login_required
 def profile(request):
@@ -46,6 +47,13 @@ def signup(request):
 
 @csrf_exempt
 def upload_audio(request):
+    user_profile = UserProfile.objects.get(user=request.user)
+    if user_profile.subscription_type == 'free':
+        # Ограничение для бесплатных пользователей
+        uploaded_files = AudioRecord.objects.filter(user=request.user).count()
+        if uploaded_files >= 5:  # Лимит на 5 файлов
+            return redirect('upgrade_subscription')  # Перенаправление на страницу подписки
+    # Логика загрузки аудио
     if request.method == 'POST':
         # Если запрос отправлен через форму
         if request.FILES.get('file'):
@@ -244,6 +252,24 @@ def calculate_clarity(text, total_words):
     return round(clarity, 2)
 
 def analysis_history(request):
-    # Извлекаем все записи анализа для текущего пользователя
     reports = SpeechReport.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'speech/analysis_history.html', {'reports': reports})
+    
+    chart_data = {
+        "dates": [report.created_at.strftime("%Y-%m-%d %H:%M:%S") for report in reports],
+        "wpm": [report.wpm for report in reports],
+        "pause_count": [report.pause_count for report in reports],
+        "total_pause_duration": [report.total_pause_duration for report in reports],
+        "clarity": [report.clarity for report in reports],
+    }
+    
+    return render(request, 'speech/analysis_history.html', {
+        'reports': reports,
+        'chart_data': json.dumps(chart_data, cls=DjangoJSONEncoder),
+    })
+
+def speech_report_detail(request, report_id):
+    report = get_object_or_404(SpeechReport, id=report_id, user=request.user)
+    return render(request, 'speech/speech_report_detail.html', {'report': report})
+
+def upgrade_subscription(request):
+    return render(request, 'speech/upgrade_subscription.html')

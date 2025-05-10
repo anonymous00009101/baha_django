@@ -7,6 +7,11 @@ class UserProfile(models.Model):
     avatar = models.ImageField(upload_to='avatars/', blank=True, null=True)
     bio = models.TextField(blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)  # Поле для даты создания
+    subscription_type = models.CharField(
+        max_length=10,
+        choices=[('free', 'Free'), ('premium', 'Premium')],
+        default='free'
+    )
 
     def __str__(self):
         return self.user.username

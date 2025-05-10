@@ -12,6 +12,7 @@ urlpatterns = [
     path('', lambda request: redirect('login')),  # Перенаправление на страницу входа
     path('audio_list/', views.audio_list, name='audio_list'),
     path('audio/delete/<int:pk>/', views.delete_audio, name='delete_audio'),
+    path('report/<int:report_id>/', views.speech_report_detail, name='speech_report_detail'),
 ]
 
 # Обработка медиафайлов
